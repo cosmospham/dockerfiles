@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+    php_myweb:
+        image: php:7.1.5-apache
+        ports:
+            - 8888:80
+        networks:
+            - myweb
+        volumes:
+            - .:/var/www/html
+            - log_data:/var/log/apache2
+            - ./php.ini:/usr/local/etc/php/php.ini ## custom php.ini file
+            - ./000-default.conf:/etc/apache2/sites-available/000-default.conf
+        restart: always
+
+networks:
+    myweb:
+        driver: "bridge"
+
+volumes:
+    web_data:
+    log_data:

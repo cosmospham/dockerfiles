@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+    wordpress_mywordpress:
+        image: wordpress:latest
+        ports:
+            - 9081:80
+        environment:
+            - WORDPRESS_DB_HOST=mysql
+            - WORDPRESS_DB_USER=user
+            - WORDPRESS_DB_PASSWORD=password
+            - WORDPRESS_DB_NAME=wordpress
+            - WORDPRESS_TABLE_PREFIX=wp_
+        links:
+            - mysql_mywordpress:mysql
+        networks:
+            - mywordpress
+        volumes:
+            - web_data:/var/www/html
+            - ./php.ini:/usr/local/etc/php/php.ini ## custom php.ini file
+        restart: always
+
+    mysql_mywordpress:
+        image: mysql:5.7
+        volumes:
+            - db_data:/var/lib/mysql
+        ports:
+            - 9181:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+            - MYSQL_DATABASE=wordpress
+        networks:
+            - mywordpress
+        restart: always
+
+networks:
+    mywordpress:
+        driver: "bridge"
+
+volumes:
+    db_data:
+    web_data:

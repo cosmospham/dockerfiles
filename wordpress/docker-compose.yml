@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+    wordpress_mywordpress:
+        image: wordpress:4.7.4-php7.1-apache
+        ports:
+            - 9081:80
+        environment:
+            - WORDPRESS_DB_HOST=mysql
+            - WORDPRESS_DB_USER=user
+            - WORDPRESS_DB_PASSWORD=password
+            - WORDPRESS_DB_NAME=wordpress
+            - WORDPRESS_TABLE_PREFIX=wp_
+        links:
+            - mysql_mywordpress:mysql
+        networks:
+            - mywordpress
+
+    mysql_mywordpress:
+        image: mysql:5.7
+        ports:
+            - 9181:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=password
+            - MYSQL_DATABASE=wordpress
+        networks:
+            - mywordpress
+
+networks:
+    mywordpress:
+        driver: "bridge"
